@@ -38,4 +38,11 @@ public class Studio {
     public void setDirector(String director) {
         this.director = director;
     }
+    
+    @Override
+    public String toString(){
+        return "Studio: " + name +
+                "\n Director: " + director +
+                "\n capital: " + capital;
+    }
 }

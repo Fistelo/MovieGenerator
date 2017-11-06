@@ -4,7 +4,6 @@ import Content.Consts;
 import Content.Resources;
 import Utils.HttpOperations;
 import Model.Movie;
-import org.json.HTTP;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -15,17 +14,15 @@ import java.util.List;
 /**
  * Created by rados on 04.11.2017.
  */
-public class MovieHandler {
+public class MovieGenerator {
     
     private List<Movie> movies = new ArrayList<Movie>();
     
-    private Resources resources;
     private int pagesNumber;
     private int recordsNumber;
     private String baseURL;
     
-    public MovieHandler(Resources resources){
-        this.resources = resources;
+    public MovieGenerator(){
         baseURL = Consts.API_LOCATION + "/discover/movie?" + Consts.API_KEY + "&sort_by=popularity.desc";
         init();
     }
@@ -45,7 +42,7 @@ public class MovieHandler {
     }
     
     
-    public void getMoviesFromApi(int numberOfMovies) throws IOException {
+    public void generateMoviesFromApi(int numberOfMovies) throws IOException {
         
         String url;
         
@@ -66,7 +63,7 @@ public class MovieHandler {
         for(int i=0 ; i<moviesArray.length() ; i++){
             JSONObject singleMovie = moviesArray.getJSONObject(i);
             String genre = getGenre(singleMovie.getJSONArray("genre_ids"));
-            String director = resources.getRandomDirector();
+            String director = Resources.getInstance().getRandomDirector();
             long profit = generateProfitFromVote(singleMovie.getDouble("vote_average"));
             
             Movie movie = new Movie(singleMovie.getString("original_title"),
@@ -81,7 +78,7 @@ public class MovieHandler {
     private String getGenre(JSONArray genreIDs){
         
         int genreID = genreIDs.getInt(0);
-        return resources.getGenreById(genreID);
+        return Resources.getInstance().getGenreById(genreID);
     }
     
     private long generateProfitFromVote(double vote){

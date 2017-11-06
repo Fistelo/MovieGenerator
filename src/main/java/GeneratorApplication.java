@@ -1,5 +1,6 @@
-import Content.Resources;
-import Generators.MovieHandler;
+import Generators.DistributorsGenerator;
+import Generators.MovieGenerator;
+import Generators.StudioGenerator;
 
 import java.io.IOException;
 
@@ -10,10 +11,15 @@ public class GeneratorApplication {
     
     public static void main(String[] args) {
     
-        MovieHandler movieHandler = new MovieHandler(new Resources());
+        MovieGenerator movieHandler = new MovieGenerator();
+        StudioGenerator studioGenerator = new StudioGenerator();
+        DistributorsGenerator distributorsGenerator = new DistributorsGenerator();
         
         try {
-            movieHandler.getMoviesFromApi(10);
+            movieHandler.generateMoviesFromApi(1);
+            
+            distributorsGenerator.generateDistributors(1);
+            studioGenerator.generateStudios(4);
         } catch (IOException e) {
             e.printStackTrace();
         }
