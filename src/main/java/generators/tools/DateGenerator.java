@@ -1,4 +1,4 @@
-package Generators;
+package generators.tools;
 
 import java.time.LocalDate;
 import java.util.Random;
@@ -8,8 +8,9 @@ import java.util.Random;
  */
 public class DateGenerator {
     
+    Random rand = new Random();
+    
     public LocalDate generateDate(int yearFrom, int yearTo){
-        Random rand = new Random();
        
         int minDay = (int) LocalDate.of(yearFrom, 1, 1).toEpochDay();
         int maxDay = (int) LocalDate.of(yearTo, 1, 1).toEpochDay();
@@ -17,5 +18,14 @@ public class DateGenerator {
         
         return LocalDate.ofEpochDay(randomDay);
         
+    }
+    
+    public String generateTime(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(rand.nextInt(24));
+        sb.append(":");
+        int minutes = rand.nextInt(6)*10;
+        sb.append(String.format("%02d", minutes));
+        return sb.toString();
     }
 }

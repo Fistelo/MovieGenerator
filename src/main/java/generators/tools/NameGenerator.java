@@ -1,7 +1,7 @@
-package Generators;
+package generators.tools;
 
-import Content.Resources;
-import Model.Name;
+import content.Resources;
+import model.Name;
 
 import java.util.List;
 import java.util.Random;

@@ -1,9 +1,9 @@
-package Model;
+package model;
 
 /**
  * Created by rados on 05.11.2017.
  */
-public class Studio {
+public class Studio implements DbParsable{
 
     private String name;
     private long capital;
@@ -44,5 +44,11 @@ public class Studio {
         return "Studio: " + name +
                 "\n Director: " + director +
                 "\n capital: " + capital;
+    }
+    
+    @Override
+    public String parseToDb() {
+        return "insert into Wytwornia (\"Nazwa\", \"Kapital\", \"Dyrektor\") values (\'"
+                + name  + "\', \'" + capital +"\', \'" + director + "\');";
     }
 }

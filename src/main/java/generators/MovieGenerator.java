@@ -1,15 +1,22 @@
-package Generators;
+package generators;
 
-import Content.Consts;
-import Content.Resources;
-import Utils.HttpOperations;
-import Model.Movie;
+import content.Consts;
+import content.Resources;
+import model.Distributor;
+import model.Studio;
+import utils.HttpOperations;
+import model.Movie;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by rados on 04.11.2017.
@@ -17,13 +24,19 @@ import java.util.List;
 public class MovieGenerator {
     
     private List<Movie> movies = new ArrayList<Movie>();
+    private List<Movie> moviesToDistribution = new ArrayList<Movie>();
+    private List<Movie> moviesDistributed = new ArrayList<Movie>();
     
     private int pagesNumber;
     private int recordsNumber;
     private String baseURL;
+    private List<Studio> studios;
+    private List<Distributor> distributors;
     
-    public MovieGenerator(){
+    public MovieGenerator(List<Studio> studios, List<Distributor> distributors){
         baseURL = Consts.API_LOCATION + "/discover/movie?" + Consts.API_KEY + "&sort_by=popularity.desc";
+        this.studios = studios;
+        this.distributors = distributors;
         init();
     }
     
@@ -42,7 +55,7 @@ public class MovieGenerator {
     }
     
     
-    public void generateMoviesFromApi(int numberOfMovies) throws IOException {
+    public List<Movie> generateMoviesFromApi(int numberOfMovies) throws IOException {
         
         String url;
         
@@ -55,7 +68,18 @@ public class MovieGenerator {
             if(movies.size() >= numberOfMovies )
                 break;
         }
-        showList();
+        divide();
+        exportToFile();
+        return moviesToDistribution;
+    }
+    
+    private void divide(){
+        for (int i = 0; i < movies.size(); i++){
+            if(Consts.NUMBEROF_MOVIES_TO_DISTRIBUTE < i)
+                moviesToDistribution.add(movies.get(i));
+            else
+                moviesDistributed.add(movies.get(i));
+        }
     }
     
     private void makeMovieFromJSON(JSONArray moviesArray){
@@ -70,7 +94,9 @@ public class MovieGenerator {
                     director,
                     singleMovie.getString("overview"),
                     genre,
-                    profit);
+                    profit,
+                    studios.get(new Random().nextInt(studios.size())),
+                    distributors.get(new Random().nextInt(distributors.size())));
             movies.add(movie);
         }
     }
@@ -86,8 +112,25 @@ public class MovieGenerator {
         return (long) profit;
     }
     
-    private void showList(){
-          for(int i=0;i<movies.size();i++)
-             System.out.println(i + ":   " + movies.get(i).toString());
+    private void exportToFile() throws IOException {
+    
+        Path dir = Paths.get(Consts.OUTPUT_FILE);
+            for (int i = 0; i < movies.size(); i++) {
+                String data = movies.get(i).parseToDb() + "\n";
+                if (!Files.exists(dir))
+                    Files.write(dir, data.getBytes());
+                else
+                    Files.write(dir, data.getBytes(), StandardOpenOption.APPEND);
+            }
+            
+            for (int i = 0; i < moviesToDistribution.size(); i++) {
+            String data = moviesToDistribution.get(i).parseToDistribution() + "\n";
+            Files.write(dir, data.getBytes(), StandardOpenOption.APPEND);
+             }
+    
+            for (int i = 0; i < moviesDistributed.size(); i++) {
+                String data = moviesDistributed.get(i).parsePreviousFilms() + "\n";
+                Files.write(dir, data.getBytes(), StandardOpenOption.APPEND);
+            }
     }
 }

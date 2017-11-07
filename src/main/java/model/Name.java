@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 /**
  * Created by rados on 06.11.2017.
@@ -9,8 +9,12 @@ public class Name {
     private String surname;
     
     public Name(String firstName, String surname){
-        this.firstName = firstName;
-        this.surname = surname;
+        this.firstName = parsee(firstName);
+        this.surname = parsee(surname);
+    }
+    
+    public String parsee(String toParse){
+       return toParse.replace("\'", "");
     }
     
     @Override

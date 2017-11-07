@@ -1,8 +1,16 @@
-package Generators;
+package generators;
 
-import Model.Distributor;
-import Model.Name;
+import content.Consts;
+import generators.tools.DateGenerator;
+import generators.tools.NameGenerator;
+import model.Distributor;
+import model.Name;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,7 +24,7 @@ public class DistributorsGenerator {
     private String[] emailDomains = {"gmail.com", "msn.com", "yahoo.com", "hotmail.com"};
     private List<Distributor> generatedDistributors = new ArrayList<>();
     
-    public void generateDistributors(int numberOfDistributors){
+    public List<Distributor> generateDistributors(int numberOfDistributors) throws IOException {
         NameGenerator nameGenerator = new NameGenerator();
         DateGenerator dateGenerator = new DateGenerator();
         
@@ -25,7 +33,9 @@ public class DistributorsGenerator {
             generatedDistributors.add(new Distributor(name, generateSSN(), generateTelNumber(),
                     generateEmail(name), dateGenerator.generateDate(1950, 2000), "" ));
         }
-        showList();
+    
+        export();
+        return generatedDistributors;
     }
     
     private String generateSSN(){
@@ -58,9 +68,15 @@ public class DistributorsGenerator {
         return sb.toString();
     }
     
-    private void showList(){
-        for(int i=0;i<generatedDistributors.size();i++)
-            System.out.println(i + ":   " + generatedDistributors.get(i).toString());
+    private void export() throws IOException {
+        Path dir = Paths.get(Consts.OUTPUT_FILE);
+        for (int i = 0; i < generatedDistributors.size(); i++) {
+            String data = generatedDistributors.get(i).parseToDb() + "\n";
+            if (!Files.exists(dir))
+                Files.write(dir, data.getBytes());
+            else
+                Files.write(dir, data.getBytes(), StandardOpenOption.APPEND);
+        }
     }
  
 }
