@@ -27,9 +27,12 @@ public class GeneratorApplication {
             
             ExceldataGenerator exceldataGenerator = new ExceldataGenerator(movies,distributors);
             
-            for(int i = 0; i< Consts.NUMBEROF_EXCEL_FILMS; i++)
+            for(int i = 0; i< Consts.NUMBEROF_EXCEL_FILMS; i++){
                 exceldataGenerator.generateExcelData(Consts.NUMBEROF_EXCEL_KEYS);
-        
+                System.out.println("Excel data " + i  + "/" + Consts.NUMBEROF_EXCEL_FILMS);
+            }
+            System.out.println(Consts.EXCEL_GENERATED);
+            
         } catch (IOException e) {
             e.printStackTrace();
         }

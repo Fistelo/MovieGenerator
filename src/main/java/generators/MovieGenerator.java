@@ -70,6 +70,7 @@ public class MovieGenerator {
         }
         divide();
         exportToFile();
+        System.out.println(Consts.MOVIES_GENERATED);
         return moviesToDistribution;
     }
     
@@ -114,7 +115,7 @@ public class MovieGenerator {
     
     private void exportToFile() throws IOException {
     
-        Path dir = Paths.get(Consts.OUTPUT_FILE);
+        Path dir = Paths.get(Consts.OUTPUT_SQL_FILE);
             for (int i = 0; i < movies.size(); i++) {
                 String data = movies.get(i).parseToDb() + "\n";
                 if (!Files.exists(dir))

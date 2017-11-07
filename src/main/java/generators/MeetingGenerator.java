@@ -34,11 +34,12 @@ public class MeetingGenerator{
                     dateGenerator.generateTime(), movies.get(new Random().nextInt(movies.size()))));
         }
         export();
+        System.out.println(Consts.MEETINGS_GENERATED);
         return generatedMeetings;
     }
     
     private void export() throws IOException {
-        Path dir = Paths.get(Consts.OUTPUT_FILE);
+        Path dir = Paths.get(Consts.OUTPUT_SQL_FILE);
         for (int i = 0; i < generatedMeetings.size(); i++) {
             String data = generatedMeetings.get(i).parseToDb() + "\n";
             Files.write(dir, data.getBytes(), StandardOpenOption.APPEND);

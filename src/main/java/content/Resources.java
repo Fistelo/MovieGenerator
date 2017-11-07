@@ -47,6 +47,10 @@ public class Resources {
         return genreName == null ? "No Genre" : genreName;
     }
     
+    public String getExcelHeaders(){
+        return "Nazwa filmu \t Rezyser filmu \t ID_klucza \t Data_od \t Data_do \t Dystrybutor \t Procent ceny \n";
+    }
+    
     public List<String> getStudios(){
         return studios;
     }

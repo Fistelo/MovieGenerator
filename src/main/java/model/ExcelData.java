@@ -26,4 +26,9 @@ public class ExcelData {
         this.distributor = distributor;
         this.pricePercent = pricePercent;
     }
+    
+    public String parseToExcel(){
+        return movieName + "\t" + directorName + "\t" + keyId + "\t" + dateFrom +
+                "\t" + dateTo + "\t" + distributor + "\t" + pricePercent;
+    }
 }

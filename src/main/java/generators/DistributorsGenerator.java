@@ -35,6 +35,7 @@ public class DistributorsGenerator {
         }
     
         export();
+        System.out.println(Consts.DISTRIBUTORS_GENERATED);
         return generatedDistributors;
     }
     
@@ -69,7 +70,7 @@ public class DistributorsGenerator {
     }
     
     private void export() throws IOException {
-        Path dir = Paths.get(Consts.OUTPUT_FILE);
+        Path dir = Paths.get(Consts.OUTPUT_SQL_FILE);
         for (int i = 0; i < generatedDistributors.size(); i++) {
             String data = generatedDistributors.get(i).parseToDb() + "\n";
             if (!Files.exists(dir))

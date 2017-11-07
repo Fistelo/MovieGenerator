@@ -39,6 +39,7 @@ public class StudioGenerator {
             generatedStudios.add(new Studio(studioName, generateCapital(), nameGenerator.generateFullName().toString()));
         }
         export();
+        System.out.println(Consts.STUDIOS_GENERATED);
         return generatedStudios;
     }
     
@@ -52,7 +53,7 @@ public class StudioGenerator {
     }
     
     private void export() throws IOException {
-        Path dir = Paths.get(Consts.OUTPUT_FILE);
+        Path dir = Paths.get(Consts.OUTPUT_SQL_FILE);
         for (int i = 0; i < generatedStudios.size(); i++) {
             String data = generatedStudios.get(i).parseToDb() + "\n";
             Files.write(dir, data.getBytes(), StandardOpenOption.APPEND);
